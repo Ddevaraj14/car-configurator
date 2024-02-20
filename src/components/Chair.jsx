@@ -9,25 +9,25 @@ import * as THREE from "three";
 import { useCustomization } from "../contexts/Customization";
 
 const Chair = (props) => {
-  const { material } = useCustomization();
+  const { material, legs, chairColor, cushionColor } = useCustomization();
 
   const { nodes, materials } = useGLTF("./models/chair.gltf");
 
   const leatherTextureProps = useTexture({
-    map: "./textures/leather/Leather_008_Base Color.jpg",
+    // map: "./textures/leather/Leather_008_Base Color.jpg",
     normalMap: "./textures/leather/Leather_008_Normal.jpg",
     roughnessMap: "./textures/leather/Leather_008_Roughness.jpg",
     aoMap: "./textures/leather/Leather_008_Ambient Occlusion.jpg",
   });
 
-  leatherTextureProps.map.repeat.set(3, 3);
+  // leatherTextureProps.map.repeat.set(3, 3);
   leatherTextureProps.normalMap.repeat.set(3, 3);
   leatherTextureProps.roughnessMap.repeat.set(3, 3);
   leatherTextureProps.aoMap.repeat.set(3, 3);
 
-  leatherTextureProps.map.wrapS =
-    leatherTextureProps.map.wrapT =
-    leatherTextureProps.normalMap.wrapS =
+  // leatherTextureProps.map.wrapS =
+  //   leatherTextureProps.map.wrapT =
+  leatherTextureProps.normalMap.wrapS =
     leatherTextureProps.normalMap.wrapT =
     leatherTextureProps.roughnessMap.wrapS =
     leatherTextureProps.roughnessMap.wrapT =
@@ -37,22 +37,22 @@ const Chair = (props) => {
 
   // import textures
   const fabricTextureProps = useTexture({
-    map: "./textures/fabric/Fabric_Knitted_006_basecolor.jpg",
+    // map: "./textures/fabric/Fabric_Knitted_006_basecolor.jpg",
     normalMap: "./textures/fabric/Fabric_Knitted_006_normal.jpg",
     roughnessMap: "./textures/fabric/Fabric_Knitted_006_roughness.jpg",
     aoMap: "./textures/fabric/Fabric_Knitted_006_ambientOcclusion.jpg",
   });
 
   // Adjust the texture size
-  fabricTextureProps.map.repeat.set(2, 2);
+  // fabricTextureProps.map.repeat.set(2, 2);
   fabricTextureProps.normalMap.repeat.set(2, 2);
   fabricTextureProps.roughnessMap.repeat.set(2, 2);
   fabricTextureProps.aoMap.repeat.set(2, 2);
 
   //Adjust the texture to fit the object
-  fabricTextureProps.map.wrapS =
-    fabricTextureProps.map.wrapT =
-    fabricTextureProps.normalMap.wrapS =
+  // fabricTextureProps.map.wrapS =
+  //   fabricTextureProps.map.wrapT =
+  fabricTextureProps.normalMap.wrapS =
     fabricTextureProps.normalMap.wrapT =
     fabricTextureProps.roughnessMap.wrapS =
     fabricTextureProps.roughnessMap.wrapT =
@@ -67,16 +67,24 @@ const Chair = (props) => {
           {...(material === "leather"
             ? leatherTextureProps
             : fabricTextureProps)}
+          color={chairColor.color}
         />
       </mesh>
       <mesh geometry={nodes.Cushion.geometry} position={[0, 0.064, 0.045]}>
-        <meshStandardMaterial {...fabricTextureProps} />
+        <meshStandardMaterial
+          {...fabricTextureProps}
+          color={cushionColor.color}
+        />
       </mesh>
-      <mesh geometry={nodes.Legs1.geometry} material={materials.Legs} />
+      <mesh
+        geometry={nodes.Legs1.geometry}
+        material={materials.Legs}
+        visible={legs === 1}
+      />
       <mesh
         geometry={nodes.Legs2.geometry}
         material={materials.Legs}
-        visible={false}
+        visible={legs === 2}
       />
       <meshStandardMaterial {...props} />
     </group>
